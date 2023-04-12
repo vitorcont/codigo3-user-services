@@ -9,3 +9,40 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        Int      @id @default(dbgenerated())
+  email     String   @unique
+  name      String
+  password  String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deletedAt DateTime @map("deleted_at")
+
+  routes Route[]
+
+  @@map("user")
+}
+
+model Route {
+  id               Int      @id @default(dbgenerated())
+  email            String   @unique
+  name             String
+  userId           Int      @map("user_id")
+  priority         Int
+  initialLatitude  Decimal  @map("initial_latitude")
+  initialLongitude Decimal  @map("initial_longitude")
+  finalLatitude    Decimal  @map("final_latitude")
+  finalLongitude   Decimal  @map("final_longitude")
+  compressedRoute  String?
+  departedAt       DateTime @map("departed_at")
+  arrivedAt        DateTime @map("arrived_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deletedAt DateTime @map("deleted_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("Route")
+}
