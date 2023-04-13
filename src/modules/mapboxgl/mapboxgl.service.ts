@@ -10,17 +10,16 @@ export class MapboxglService {
     return 'This action adds a new mapboxgl';
   }
 
-  async searchRoute(data: FindRoute) {
+  async searchRoute(routeData: FindRoute) {
     try {
       const routeInstance = getRoutesInstance();
-      const route = await routeInstance.get(maskCoordinates(data));
-
-      return route;
+      const { data } = await routeInstance.get(maskCoordinates(routeData));
+      return data;
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       //
+      return `This action returns all mapboxgl`;
     }
-    return `This action returns all mapboxgl`;
   }
 
   findOne(id: number) {

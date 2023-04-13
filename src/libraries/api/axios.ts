@@ -16,7 +16,6 @@ export const getAxiosInstance = (): AxiosInstance => {
 };
 
 export const getRoutesInstance = (): AxiosInstance => {
-  console.log(process.env.MAPBOXGL_TOKEN);
   axiosInstance.interceptors.request.use((request) => {
     request.baseURL = `https://api.mapbox.com/directions/v5/mapbox/driving-traffic`;
     request.params = {

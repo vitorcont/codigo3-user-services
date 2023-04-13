@@ -7,6 +7,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { RoutesService } from './routes.service';
 import { CreateRouteDto } from './dto/create-route.dto';
@@ -25,7 +26,8 @@ export class RoutesController {
   }
 
   @Get()
-  findRoute(@Param() data: FindRoute) {
+  findRoute(@Query() data: FindRoute) {
+    console.log(data);
     return this.routesService.findRoute(data);
   }
 
