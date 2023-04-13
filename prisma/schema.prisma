@@ -19,12 +19,12 @@ model User {
   updatedAt DateTime @updatedAt @map("updated_at")
   deletedAt DateTime @map("deleted_at")
 
-  routes Route[]
+  travels Travel[]
 
   @@map("user")
 }
 
-model Route {
+model Travel {
   id               Int      @id @default(dbgenerated())
   email            String   @unique
   name             String
@@ -44,5 +44,5 @@ model Route {
 
   user User @relation(fields: [userId], references: [id])
 
-  @@map("Route")
+  @@map("travel")
 }

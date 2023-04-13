@@ -2,7 +2,6 @@ import Axios, { AxiosInstance } from 'axios';
 import * as https from 'https';
 
 const axiosInstance = Axios.create({
-  baseURL: '',
   headers: {
     Accept: '*/*',
   },
@@ -13,5 +12,25 @@ const axiosInstance = Axios.create({
 });
 
 export const getAxiosInstance = (): AxiosInstance => {
+  return axiosInstance;
+};
+
+export const getRoutesInstance = (): AxiosInstance => {
+  console.log(process.env.MAPBOXGL_TOKEN);
+  axiosInstance.interceptors.request.use((request) => {
+    request.baseURL = `https://api.mapbox.com/directions/v5/mapbox/driving-traffic`;
+    request.params = {
+      alternatives: true,
+      annotations: 'distance',
+      geometries: 'geojson',
+      language: 'pt',
+      overview: 'full',
+      steps: true,
+      access_token: process.env.MAPBOXGL_TOKEN,
+    };
+
+    return request;
+  });
+
   return axiosInstance;
 };

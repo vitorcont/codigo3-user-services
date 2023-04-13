@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MapboxglService } from './mapboxgl.service';
-import { MapboxglController } from './mapboxgl.controller';
 
 @Module({
-  controllers: [MapboxglController],
-  providers: [MapboxglService]
+  controllers: [],
+  providers: [MapboxglService],
+  exports: [MapboxglService],
 })
 export class MapboxglModule {}

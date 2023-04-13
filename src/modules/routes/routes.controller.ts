@@ -1,25 +1,32 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { FindRoute } from './dto/find-route.dtos';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { RoutesService } from './routes.service';
 import { CreateRouteDto } from './dto/create-route.dto';
 import { UpdateRouteDto } from './dto/update-route.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { create } from 'domain';
 
+@ApiTags('Routes')
 @Controller('routes')
 export class RoutesController {
   constructor(private readonly routesService: RoutesService) {}
 
   @Post()
-  create(@Body() createRouteDto: CreateRouteDto) {
+  startRoute(@Body() createRouteDto: CreateRouteDto) {
     return this.routesService.create(createRouteDto);
   }
 
   @Get()
-  findAll() {
-    return this.routesService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.routesService.findOne(+id);
+  findRoute(@Param() data: FindRoute) {
+    return this.routesService.findRoute(data);
   }
 
   @Patch(':id')
