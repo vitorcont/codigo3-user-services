@@ -1,0 +1,24 @@
+BEGIN TRY
+
+BEGIN TRAN;
+
+-- AlterTable
+ALTER TABLE [dbo].[travel] ALTER COLUMN [departed_at] DATETIME2 NULL;
+ALTER TABLE [dbo].[travel] ALTER COLUMN [arrived_at] DATETIME2 NULL;
+ALTER TABLE [dbo].[travel] ALTER COLUMN [deleted_at] DATETIME2 NULL;
+
+-- AlterTable
+ALTER TABLE [dbo].[user] ALTER COLUMN [deleted_at] DATETIME2 NULL;
+
+COMMIT TRAN;
+
+END TRY
+BEGIN CATCH
+
+IF @@TRANCOUNT > 0
+BEGIN
+    ROLLBACK TRAN;
+END;
+THROW
+
+END CATCH

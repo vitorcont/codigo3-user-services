@@ -1,26 +1,45 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { RecoveryDto } from './dto/recovery.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import { generateJwt } from './../../libraries/encryption/jwt';
+import { comparePassword } from './../../libraries/encryption/becrypt';
+import { Injectable, HttpException } from '@nestjs/common';
+import { AuthenticateDto } from './dto/authenticate.dto';
+import PrismaService from 'src/libraries/prisma/prisma.service';
+import { HttpStatusCode } from 'axios';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
+  constructor(private prisma: PrismaService) {}
+  async authenticate(authData: AuthenticateDto) {
+    try {
+      const user = await this.prisma.user.findFirst({
+        where: {
+          email: authData.email,
+        },
+      });
+      const validated = await comparePassword(authData.password, user.password);
+      if (!validated) {
+        throw Error();
+      }
+      const token = generateJwt(user);
 
-  findAll() {
-    return `This action returns all auth`;
+      return { token };
+    } catch (err) {
+      new HttpException('Bad Request', HttpStatusCode.BadRequest);
+    }
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
+  async changePassword(authData: ChangePasswordDto) {
+    try {
+      //
+    } catch (err) {
+      new HttpException('Bad Request', HttpStatusCode.BadRequest);
+    }
   }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  async recovery(authData: RecoveryDto) {
+    try {
+      //
+    } catch (err) {
+      new HttpException('Bad Request', HttpStatusCode.BadRequest);
+    }
   }
 }

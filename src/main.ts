@@ -9,13 +9,13 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('API Atendimento a emergências')
     .setDescription('Aplicação voltada a priorização de veículos oficiais')
-    // .addBearerAuth({
-    //   name: 'Authorization',
-    //   bearerFormat: 'Bearer',
-    //   scheme: 'Bearer',
-    //   type: 'http',
-    //   in: 'Header',
-    // })
+    .addBearerAuth({
+      name: 'Authorization',
+      bearerFormat: 'Bearer',
+      scheme: 'Bearer',
+      type: 'http',
+      in: 'Header',
+    })
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/', app, document);

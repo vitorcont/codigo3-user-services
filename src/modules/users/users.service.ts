@@ -1,26 +1,82 @@
-import { Injectable } from '@nestjs/common';
+import { HttpCode, HttpException, Injectable } from '@nestjs/common';
+import { HttpStatusCode } from 'axios';
+import { hashPassword } from 'src/libraries/encryption/becrypt';
+import PrismaService from 'src/libraries/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(private prisma: PrismaService) {}
+
+  async create(createUserDto: CreateUserDto) {
+    try {
+      const hashedPassword = hashPassword(createUserDto.password);
+      const result = await this.prisma.user.create({
+        data: { ...createUserDto, password: hashedPassword, deletedAt: null },
+      });
+
+      return result;
+    } catch (err) {
+      new HttpException('Bad Request', HttpStatusCode.BadRequest);
+    }
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    try {
+      const result = await this.prisma.user.findMany();
+
+      return result;
+    } catch (err) {
+      new HttpException('Bad Request', HttpStatusCode.BadRequest);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    try {
+      const result = await this.prisma.user.findFirst({
+        where: {
+          id,
+        },
+      });
+
+      return result;
+    } catch (err) {
+      new HttpException('Bad Request', HttpStatusCode.BadRequest);
+    }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    try {
+      const result = await this.prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          name: updateUserDto.name,
+        },
+      });
+
+      return result;
+    } catch (err) {
+      new HttpException('Bad Request', HttpStatusCode.BadRequest);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    try {
+      const result = await this.prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          deletedAt: new Date(),
+        },
+      });
+
+      return result;
+    } catch (err) {
+      new HttpException('Bad Request', HttpStatusCode.BadRequest);
+    }
   }
 }

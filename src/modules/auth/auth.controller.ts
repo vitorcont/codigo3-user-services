@@ -1,34 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { AuthenticateDto } from './dto/authenticate.dto';
+import { RecoveryDto } from './dto/recovery.dto';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+  @Post('login')
+  login(@Body() authData: AuthenticateDto) {
+    return this.authService.authenticate(authData);
   }
-
-  @Get()
-  findAll() {
-    return this.authService.findAll();
+  @Post('changePassword')
+  changePassword(@Body() authData: ChangePasswordDto) {
+    return this.authService.changePassword(authData);
   }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+  @Post('recovery')
+  recovery(@Body() authData: RecoveryDto) {
+    return this.authService.recovery(authData);
   }
 }
