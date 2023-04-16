@@ -25,7 +25,7 @@ model User {
 }
 
 model Travel {
-  id               Int       @id
+  id               Int       @id @default(dbgenerated())
   email            String    @unique
   name             String
   userId           String    @map("user_id")
@@ -45,4 +45,18 @@ model Travel {
   user User @relation(fields: [userId], references: [id])
 
   @@map("travel")
+}
+
+model TrafficController {
+  id        String    @id @default(dbgenerated())
+  pathId    String    @map("path_id")
+  token     String
+  latitide  Decimal
+  longitude Decimal
+  direction Int
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@map("traffic_controller")
 }

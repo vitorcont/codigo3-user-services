@@ -1,15 +1,23 @@
 import { RecoveryDto } from './dto/recovery.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { generateJwt } from './../../libraries/encryption/jwt';
-import { comparePassword } from './../../libraries/encryption/becrypt';
-import { Injectable, HttpException } from '@nestjs/common';
+import {
+  comparePassword,
+  hashPassword,
+} from './../../libraries/encryption/becrypt';
+import { Injectable, HttpException, Scope, Inject } from '@nestjs/common';
 import { AuthenticateDto } from './dto/authenticate.dto';
 import PrismaService from 'src/libraries/prisma/prisma.service';
 import { HttpStatusCode } from 'axios';
+import { REQUEST } from '@nestjs/core';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class AuthService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @Inject(REQUEST)
+    private readonly request: any,
+    private prisma: PrismaService,
+  ) {}
   async authenticate(authData: AuthenticateDto) {
     try {
       const user = await this.prisma.user.findFirst({
@@ -30,7 +38,23 @@ export class AuthService {
   }
   async changePassword(authData: ChangePasswordDto) {
     try {
-      //
+      const validated = await comparePassword(
+        authData.oldPassword,
+        this.request.user.password,
+      );
+      if (!validated) {
+        throw Error();
+      }
+      const updatedUser = this.prisma.user.update({
+        where: {
+          id: this.request.user.id,
+        },
+        data: {
+          password: hashPassword(authData.newPassword),
+        },
+      });
+
+      return updatedUser;
     } catch (err) {
       new HttpException('Bad Request', HttpStatusCode.BadRequest);
     }

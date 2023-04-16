@@ -25,7 +25,7 @@ export class RoutesController {
     return this.routesService.create(createRouteDto);
   }
 
-  @Get()
+  @Get('findRoute')
   findRoute(@Query() data: FindRoute) {
     console.log(data);
     return this.routesService.findRoute(data);
