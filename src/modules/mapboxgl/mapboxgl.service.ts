@@ -3,6 +3,7 @@ import { getRoutesInstance } from './../../libraries/api/axios';
 import { Injectable } from '@nestjs/common';
 import { CreateMapboxglDto } from './dto/create-mapboxgl.dto';
 import { FindRoute } from '../routes/dto/find-route.dtos';
+import { MapboxglRouteList } from './entities/mapboxgl.entity';
 
 @Injectable()
 export class MapboxglService {
@@ -14,11 +15,9 @@ export class MapboxglService {
     try {
       const routeInstance = getRoutesInstance();
       const { data } = await routeInstance.get(maskCoordinates(routeData));
-      return data;
+      return data as MapboxglRouteList;
     } catch (err) {
-      // console.log(err);
-      //
-      return `This action returns all mapboxgl`;
+      throw Error();
     }
   }
 

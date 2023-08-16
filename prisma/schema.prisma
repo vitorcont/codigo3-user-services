@@ -30,10 +30,10 @@ model Travel {
   name             String
   userId           String    @map("user_id")
   priority         Int
-  initialLatitude  Decimal   @map("initial_latitude")
-  initialLongitude Decimal   @map("initial_longitude")
-  finalLatitude    Decimal   @map("final_latitude")
-  finalLongitude   Decimal   @map("final_longitude")
+  initialLatitude  Float     @map("initial_latitude")
+  initialLongitude Float     @map("initial_longitude")
+  finalLatitude    Float     @map("final_latitude")
+  finalLongitude   Float     @map("final_longitude")
   compressedRoute  String?
   departedAt       DateTime? @map("departed_at")
   arrivedAt        DateTime? @map("arrived_at")
@@ -51,8 +51,8 @@ model TrafficController {
   id        String    @id @default(dbgenerated())
   pathId    String    @map("path_id")
   token     String
-  latitide  Decimal
-  longitude Decimal
+  latitude  Float
+  longitude Float
   direction Int
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")

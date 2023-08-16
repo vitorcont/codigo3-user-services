@@ -1,3 +1,4 @@
+import { ControllerModule } from './modules/controller/controller.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RoutesModule } from './modules/routes/routes.module';
@@ -6,7 +7,13 @@ import { Module } from '@nestjs/common';
 import PrismaService from './libraries/prisma/prisma.service';
 
 @Module({
-  imports: [MapboxglModule, AuthModule, RoutesModule, UsersModule],
+  imports: [
+    MapboxglModule,
+    AuthModule,
+    RoutesModule,
+    ControllerModule,
+    UsersModule,
+  ],
   controllers: [],
   providers: [PrismaService],
 })

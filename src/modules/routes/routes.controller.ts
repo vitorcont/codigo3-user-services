@@ -8,19 +8,22 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { RoutesService } from './routes.service';
 import { CreateRouteDto } from './dto/create-route.dto';
 import { UpdateRouteDto } from './dto/update-route.dto';
-import { ApiTags } from '@nestjs/swagger';
-import { create } from 'domain';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/libraries/auth/auth.guard';
 
 @ApiTags('Routes')
 @Controller('routes')
+@ApiBearerAuth()
+// @UseGuards(AuthGuard)
 export class RoutesController {
   constructor(private readonly routesService: RoutesService) {}
 
-  @Post()
+  @Post('create')
   startRoute(@Body() createRouteDto: CreateRouteDto) {
     return this.routesService.create(createRouteDto);
   }
