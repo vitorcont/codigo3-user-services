@@ -1,8 +1,4 @@
-import {
-  getCenterCoordinates,
-  isPointInside,
-  addDistance,
-} from './../../utils/routes';
+import { getCenterCoordinates, addDistance } from './../../utils/routes';
 import { MapboxglService } from './../mapboxgl/mapboxgl.service';
 import { FindRoute } from './dto/find-route.dtos';
 import { Injectable } from '@nestjs/common';
@@ -36,7 +32,7 @@ export class RoutesService {
       );
       const routeCenter = getCenterCoordinates(baseWaypoints);
 
-      const controllersList = await this.prisma.trafficController.findMany({
+      const areaControllersList = await this.prisma.trafficController.findMany({
         where: {
           AND: [
             { latitude: { lt: addDistance(routeCenter.latitude, 50) } },
@@ -52,36 +48,7 @@ export class RoutesService {
       foundRoutes.routes.forEach((route) => {
         const counter = 0;
         const coordinates = route.geometry.coordinates;
-        for (let i = 0, j = 1; j < coordinates.length; i++, j++) {
-          const pointInitial = {
-            center: {
-              latitude: coordinates[i][1],
-              longitude: coordinates[i][0],
-            },
-            minusOffset: {
-              latitude: addDistance(coordinates[i][1], -0.02),
-              longitude: addDistance(coordinates[i][0], -0.02, true),
-            },
-            plusOffset: {
-              latitude: addDistance(coordinates[i][1], 0.02),
-              longitude: addDistance(coordinates[i][0], 0.02, true),
-            },
-          };
-          const pointFinal = {
-            center: {
-              latitude: coordinates[j][1],
-              longitude: coordinates[j][0],
-            },
-            minusOffset: {
-              latitude: addDistance(coordinates[j][1], -0.02),
-              longitude: addDistance(coordinates[j][0], -0.02, true),
-            },
-            plusOffset: {
-              latitude: addDistance(coordinates[j][1], 0.02),
-              longitude: addDistance(coordinates[j][0], 0.02, true),
-            },
-          };
-        }
+        for (let i = 0, j = 1; j < coordinates.length; i++, j++) {}
       });
 
       return null;

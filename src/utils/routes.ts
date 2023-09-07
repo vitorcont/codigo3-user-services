@@ -15,7 +15,7 @@ export const maskCoordinates = (data: FindRoute) => {
   return `/${data.originLongitude},${data.originLatitude};${data.destinationLongitude},${data.destinationLatitude}`;
 };
 
-export const isPointInside = (
+export const isPointInsideRadius = (
   checkPoint: Point,
   centerPoint: Point,
   km: number,
@@ -77,16 +77,119 @@ export const calculateBearing = (pointInitial: Point, pointFinal: Point) => {
   return bearing;
 };
 
-export const isPointInRoute = (
-  point: Point,
-  pointInitial: RoundedPoint,
-  pointFinal: RoundedPoint,
+export const isPointInsideRoute = (
+  pointSearched: Point,
+  pointA: Point,
+  pointB: Point,
 ) => {
-  const isInsideWidth =
-    point.latitude < pointInitial.plusOffset.latitude &&
-    point.latitude > pointInitial.minusOffset.latitude;
+  const bearing = calculateBearing(pointA, pointB);
 
-  const isInsideHeight =
-    point.longitude < pointInitial.minusOffset.longitude &&
-    point.longitude > pointInitial.minusOffset.latitude;
+  let latitudeFlag = false;
+  let longitudeFlag = false;
+
+  if ((bearing > 315 && bearing < 45) || (bearing > 134 && bearing < 225)) {
+    //NORTE OU SUL
+    const pointInitial = {
+      center: {
+        latitude: pointA.latitude,
+        longitude: pointA.longitude,
+      },
+      minusOffset: {
+        latitude: addDistance(pointA.latitude, -0.02),
+        longitude: pointA.longitude,
+      },
+      plusOffset: {
+        latitude: addDistance(pointA.latitude, 0.02),
+        longitude: pointA.longitude,
+      },
+    };
+    const pointFinal = {
+      center: {
+        latitude: pointB.latitude,
+        longitude: pointB.longitude,
+      },
+      minusOffset: {
+        latitude: addDistance(pointB.latitude, -0.02),
+        longitude: pointB.longitude,
+      },
+      plusOffset: {
+        latitude: addDistance(pointB.latitude, 0.02),
+        longitude: pointB.longitude,
+      },
+    };
+
+    if (
+      pointSearched.latitude <= pointInitial.plusOffset.latitude &&
+      pointSearched.latitude >= pointInitial.minusOffset.latitude
+    ) {
+      latitudeFlag = true;
+    }
+
+    if (
+      pointSearched.longitude <= pointInitial.plusOffset.longitude &&
+      pointSearched.longitude >= pointFinal.plusOffset.longitude
+    ) {
+      longitudeFlag = true;
+    }
+
+    if (
+      pointSearched.longitude <= pointInitial.plusOffset.longitude &&
+      pointSearched.longitude >= pointFinal.plusOffset.longitude
+    ) {
+      longitudeFlag = true;
+    }
+  } else {
+    //LESTE OU OESTE
+    const pointInitial = {
+      center: {
+        latitude: pointA.latitude,
+        longitude: pointA.longitude,
+      },
+      minusOffset: {
+        latitude: pointA.latitude,
+        longitude: addDistance(pointA.longitude, -0.02, true),
+      },
+      plusOffset: {
+        latitude: pointA.latitude,
+        longitude: addDistance(pointA.longitude, 0.02, true),
+      },
+    };
+    const pointFinal = {
+      center: {
+        latitude: pointB.latitude,
+        longitude: pointB.longitude,
+      },
+      minusOffset: {
+        latitude: pointA.latitude,
+        longitude: addDistance(pointB.longitude, -0.02, true),
+      },
+      plusOffset: {
+        latitude: pointA.latitude,
+        longitude: addDistance(pointB.longitude, 0.02, true),
+      },
+    };
+
+    if (
+      pointSearched.longitude <= pointInitial.plusOffset.longitude &&
+      pointSearched.longitude >= pointInitial.minusOffset.longitude
+    ) {
+      longitudeFlag = true;
+    }
+
+    if (
+      pointSearched.latitude <= pointInitial.plusOffset.latitude &&
+      pointSearched.latitude >= pointFinal.plusOffset.latitude
+    ) {
+      latitudeFlag = true;
+    }
+
+    if (
+      pointSearched.latitude <= pointInitial.plusOffset.latitude &&
+      pointSearched.latitude >= pointFinal.plusOffset.latitude
+    ) {
+      latitudeFlag = true;
+    }
+  }
+
+  return longitudeFlag && latitudeFlag;
 };

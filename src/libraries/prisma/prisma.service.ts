@@ -23,27 +23,40 @@ class PrismaService extends PrismaClient implements OnModuleInit {
       return next(params);
     });
 
-    // this.$use(async (params, next) => {
-    //   const args = params.args ?? {};
-    //   const where = args.where ?? {};
+    this.$use(async (params, next) => {
+      const args = params.args ?? {};
+      const data = args.data ?? {};
 
-    //   if (params.action === 'findUnique') {
-    //     params.action = 'findFirst';
-    //   }
+      if (params.action === 'update' || params.action === 'updateMany') {
+        params.args = {
+          ...args,
+          data: {
+            ...data,
+            updatedAt: new Date(),
+          },
+        };
+      }
 
-    //   if (
-    //     params.action === 'findFirst' ||
-    //     params.action === 'findMany' ||
-    //     params.action === 'count'
-    //   ) {
-    //     params.args = {
-    //       ...args,
-    //       where: { ...where, deletedAt: true },
-    //     };
-    //   }
+      return next(params);
+    });
 
-    //   return next(params);
-    // });
+    this.$use(async (params, next) => {
+      const args = params.args ?? {};
+      const data = args.data ?? {};
+
+      if (params.action === 'delete') {
+        params.action = 'update';
+        params.args = {
+          ...args,
+          data: {
+            ...data,
+            deletedAt: new Date(),
+          },
+        };
+      }
+
+      return next(params);
+    });
   }
 
   async enableShutdownHooks(app: INestApplication) {
