@@ -1,11 +1,14 @@
+import { NavigationSocketModule } from './modules/navigation-socket/navigation-socket.module';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { AppModule } from './app.module';
+// import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
+import { AppModule } from './app.module';
 dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
+
   const config = new DocumentBuilder()
     .setTitle('API Atendimento a emergências')
     .setDescription('Aplicação voltada a priorização de veículos oficiais')
@@ -20,6 +23,10 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/', app, document);
 
-  await app.listen(3000);
+  await app.listen(process.env.DEFAULT_PORT);
+
+  console.log(
+    `App Running on http://localhost:${process.env.DEFAULT_PORT} and socket at http://localhost:${process.env.SOCKET_PORT}`,
+  );
 }
 bootstrap();
