@@ -26,7 +26,7 @@ async function bootstrap() {
   await app.listen(process.env.DEFAULT_PORT);
 
   console.log(
-    `App Running on http://localhost:${process.env.DEFAULT_PORT} and socket at http://localhost:${process.env.SOCKET_PORT}`,
+    `\nApp Running on http://localhost:${process.env.DEFAULT_PORT} \nNavigation socket on http://localhost:${process.env.SOCKET_PORT}`,
   );
 }
 bootstrap();
