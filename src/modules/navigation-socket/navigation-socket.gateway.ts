@@ -10,7 +10,7 @@ import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
 import { NavigationSocketService } from './navigation-socket.service';
 
-@WebSocketGateway(3001)
+@WebSocketGateway({ namespace: 'navigation-socket' })
 export class NavigationSocketGateway {
   constructor(
     private readonly navigationSocketService: NavigationSocketService,
@@ -42,7 +42,7 @@ export class NavigationSocketGateway {
     const room = Array.from(client.rooms).find((item) =>
       item.includes('user-'),
     );
-    this.server.to(room).emit('roomCreated', { room });
+    this.server.to(room).emit('tripPath', { room });
   }
 
   @SubscribeMessage('updateLocation')
