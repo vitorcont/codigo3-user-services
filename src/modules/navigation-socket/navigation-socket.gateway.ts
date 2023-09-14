@@ -10,6 +10,14 @@ import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
 import { NavigationSocketService } from './navigation-socket.service';
 
+interface AA {
+  [key: string]: {
+    origin: string;
+    destination: string;
+    currentLocation: string;
+  };
+}
+
 @WebSocketGateway({ namespace: 'navigation-socket' })
 export class NavigationSocketGateway {
   constructor(
@@ -21,6 +29,7 @@ export class NavigationSocketGateway {
   @WebSocketServer() server: Server;
 
   handleConnection(client: Socket) {
+    console.log('CONNECTED', client.id);
     this.server.emit('success', {
       client: client.id,
     });
@@ -46,11 +55,11 @@ export class NavigationSocketGateway {
   }
 
   @SubscribeMessage('updateLocation')
-  verifyPath(@ConnectedSocket() client: Socket) {
+  verifyPath(@ConnectedSocket() client: Socket, @MessageBody() location: any) {
     const room = Array.from(client.rooms).find((item) =>
       item.includes('user-'),
     );
-    return '';
+    console.log(location);
   }
 
   @SubscribeMessage('endTrip')
