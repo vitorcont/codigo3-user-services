@@ -1,0 +1,33 @@
+name: User Service API Automation
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+jobs:
+  pull:
+    name: Pulling from repo
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v1
+  install_and_build:
+    runs-on: self-hosted
+    name: Install deps and build
+    needs: pull
+    steps:
+      - name: Install dependencies
+        run: yarn install
+      - name: Build
+        run: yarn build
+  upload_container:
+    runs-on: self-hosted
+    name: Update Container
+    needs: install_and_build
+    steps:
+      - name: Stop Container
+        working-directory: dashboard
+        run: docker compose down -v
+      - name: Start Container
+        working-directory: dashboard
+        run: docker compose up -d --force-recreate --renew-anon-volumes
