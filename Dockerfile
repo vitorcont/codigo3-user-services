@@ -6,5 +6,5 @@ COPY package.json .
 COPY ./dist ./dist
 COPY ./node_modules ./node_modules
 
-EXPOSE 3000
+EXPOSE 3010
 CMD [ "node", "./dist/main.js" ]
