@@ -4,24 +4,38 @@ import {
   MessageBody,
   ConnectedSocket,
   WebSocketServer,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ControllerSocketService } from './controller-socket.service';
 import { CreateControllerSocketDto } from './dto/create-controller-socket.dto';
-import { UpdateControllerSocketDto } from './dto/update-controller-socket.dto';
+import { IControllerMapper } from './entities/controller-socket.entity';
 
 @WebSocketGateway({ namespace: 'controller-socket' })
-export class ControllerSocketGateway {
+export class ControllerSocketGateway
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
   constructor(
     private readonly controllerSocketService: ControllerSocketService,
   ) {}
 
   @WebSocketServer() server: Server;
 
+  private activeControllerList: IControllerMapper = {};
+
   handleConnection(client: Socket) {
     this.server.emit('success', {
       client: client.id,
     });
+  }
+
+  async handleDisconnect(client: Socket) {
+    const room = Array.from(client.rooms).find((item) =>
+      item.includes('intersection-'),
+    );
+
+    client.leave(room);
   }
 
   @SubscribeMessage('syncController')
@@ -35,6 +49,8 @@ export class ControllerSocketGateway {
       .emit('roomCreated', {
         room: `intersection-${socketController.intersectionId}`,
       });
+
+    this.activeControllerList[socketController.intersectionId];
   }
 
   @SubscribeMessage('closeConnection')
@@ -42,8 +58,10 @@ export class ControllerSocketGateway {
     const room = Array.from(client.rooms).find((item) =>
       item.includes('intersection-'),
     );
+    const intersectionId = room.split('intersection-')[0];
     client.leave(room);
     client.disconnect;
+    delete this.activeControllerList[intersectionId];
 
     return '';
   }

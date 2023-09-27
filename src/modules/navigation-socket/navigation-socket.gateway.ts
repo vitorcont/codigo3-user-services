@@ -5,34 +5,41 @@ import {
   MessageBody,
   WebSocketServer,
   ConnectedSocket,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Logger } from '@nestjs/common';
 import { NavigationSocketService } from './navigation-socket.service';
-
-interface AA {
-  [key: string]: {
-    origin: string;
-    destination: string;
-    currentLocation: string;
-  };
-}
+import { ISearchRoute, IUserMapper, IUpdateLocation } from './dto/route';
 
 @WebSocketGateway({ namespace: 'navigation-socket' })
-export class NavigationSocketGateway {
+export class NavigationSocketGateway
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
   constructor(
     private readonly navigationSocketService: NavigationSocketService,
   ) {}
-
-  private logger: Logger = new Logger('MessageGateway');
-
+  private activeUserList: IUserMapper = {};
   @WebSocketServer() server: Server;
-
   handleConnection(client: Socket) {
-    console.log('CONNECTED', client.id);
     this.server.emit('success', {
       client: client.id,
     });
+  }
+  async handleDisconnect(client: Socket) {
+    const room = Array.from(client.rooms).find((item) =>
+      item.includes('user-'),
+    );
+    const userId = room.split('user-')[0];
+
+    if (this.activeUserList[userId].destination) {
+      await this.navigationSocketService.saveTrip(
+        userId,
+        this.activeUserList[userId],
+      );
+    }
+
+    client.leave(room);
   }
 
   @SubscribeMessage('registerUser')
@@ -41,35 +48,82 @@ export class NavigationSocketGateway {
     @ConnectedSocket() client: Socket,
   ) {
     client.join(`user-${socketUser.userId}`);
+    this.activeUserList[socketUser.userId] = null;
     this.server
       .to(`user-${socketUser.userId}`)
       .emit('roomCreated', { room: `user-${socketUser.userId}` });
   }
 
   @SubscribeMessage('startTrip')
-  findAll(client: Socket) {
+  async findAll(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() userInfo: ISearchRoute,
+  ) {
     const room = Array.from(client.rooms).find((item) =>
       item.includes('user-'),
     );
-    this.server.to(room).emit('tripPath', { room });
+    const userId = room.split('user-')[0];
+    this.activeUserList[userId] = {
+      currentLocation: null,
+      destination: userInfo.destination,
+      origin: userInfo.origin,
+      startedAt: new Date(),
+      priority: userInfo.priority,
+    };
+
+    const path = await this.navigationSocketService.searchPath({
+      originLatitude: userInfo.origin.latitute,
+      originLongitude: userInfo.origin.longitude,
+      destinationLatitude: userInfo.destination.latitute,
+      destinationLongitude: userInfo.destination.latitute,
+    });
+
+    this.server.to(room).emit('tripPath', { room, path });
   }
 
   @SubscribeMessage('updateLocation')
-  verifyPath(@ConnectedSocket() client: Socket, @MessageBody() location: any) {
+  verifyPath(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() userInfo: IUpdateLocation,
+  ) {
     const room = Array.from(client.rooms).find((item) =>
       item.includes('user-'),
     );
-    console.log(location);
+    const userId = room.split('user-')[0];
+    this.activeUserList[userId] = {
+      ...this.activeUserList[userId],
+      priority: userInfo.priority,
+      currentLocation: { ...userInfo },
+    };
   }
 
   @SubscribeMessage('endTrip')
-  endSession(@ConnectedSocket() client: Socket) {
+  async endSession(@ConnectedSocket() client: Socket) {
     const room = Array.from(client.rooms).find((item) =>
       item.includes('user-'),
     );
-    client.leave(room);
-    client.disconnect;
+    const userId = room.split('user-')[0];
 
-    return '';
+    await this.navigationSocketService.saveTrip(
+      userId,
+      this.activeUserList[userId],
+    );
+
+    this.activeUserList[userId] = {
+      ...this.activeUserList[userId],
+      origin: null,
+      destination: null,
+      startedAt: null,
+      priority: 0,
+    };
+  }
+
+  @SubscribeMessage('getUsersLocations')
+  verifyUsers(@ConnectedSocket() client: Socket) {
+    const room = Array.from(client.rooms).find((item) =>
+      item.includes('user-'),
+    );
+
+    this.server.to(room).emit('usersLocations', { ...this.activeUserList });
   }
 }

@@ -25,18 +25,16 @@ model User {
 }
 
 model Travel {
-  id               Int       @id @default(dbgenerated())
-  email            String    @unique
-  name             String
-  userId           String    @map("user_id")
-  priority         Int
-  initialLatitude  Float     @map("initial_latitude")
-  initialLongitude Float     @map("initial_longitude")
-  finalLatitude    Float     @map("final_latitude")
-  finalLongitude   Float     @map("final_longitude")
-  compressedRoute  String?
-  departedAt       DateTime? @map("departed_at")
-  arrivedAt        DateTime? @map("arrived_at")
+  id                   Int       @id @default(dbgenerated())
+  userId               String    @map("user_id")
+  priority             Int
+  originLatitude       Float     @map("origin_latitude")
+  originLongitude      Float     @map("origin_longitude")
+  destinationLatitude  Float     @map("destination_latitude")
+  destinationLongitude Float     @map("destination_longitude")
+  compressedRoute      String?
+  departedAt           DateTime? @map("departed_at")
+  arrivedAt            DateTime? @map("arrived_at")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")

@@ -1,4 +1,4 @@
-import { FindRoute } from '../modules/routes/dto/find-route.dtos';
+import { FindRoute } from 'src/modules/navigation-socket/dto/route';
 
 export interface Point {
   latitude: number;
