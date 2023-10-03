@@ -27,7 +27,7 @@ jobs:
         run: yarn build
   upload_container:
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL: ${{ secrets.ENV_DEV_DATABASE_URL }}
       MAPBOXGL_TOKEN: ${{ secrets.MAPBOXGL_TOKEN }}
       DEFAULT_PORT: ${{ secrets.DEFAULT_PORT }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
@@ -39,6 +39,10 @@ jobs:
     name: Update Container
     needs: install_and_build
     steps:
+      - name: Display secrets
+        run: |
+          echo "MY_SECRET: $DATABASE_URL"
+          echo "ANOTHER_VAR: $ANOTHER_VAR"
       - name: Stop Container
         run: docker compose down -v
       - name: Start Container
