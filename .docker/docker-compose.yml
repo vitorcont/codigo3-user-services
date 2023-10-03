@@ -1,0 +1,8 @@
+services:
+  nginx:
+    build: .
+    image: codigo3-user
+    container_name: codigo3-user-api
+    restart: unless-stopped
+    ports:
+      - '3010:3010'
