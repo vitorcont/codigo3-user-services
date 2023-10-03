@@ -21,6 +21,8 @@ jobs:
           node-version: 16.14.0
       - name: Install dependencies
         run: yarn install
+      - name: Update prisma dependencies
+        run: npx prisma generate
       - name: Build
         run: yarn build
   upload_container:
