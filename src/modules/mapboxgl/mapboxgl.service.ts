@@ -2,8 +2,8 @@ import { maskCoordinates } from './../../utils/routes';
 import { getRoutesInstance } from './../../libraries/api/axios';
 import { Injectable } from '@nestjs/common';
 import { CreateMapboxglDto } from './dto/create-mapboxgl.dto';
-import { FindRoute } from '../routes/dto/find-route.dtos';
 import { MapboxglRouteList } from './entities/mapboxgl.entity';
+import { FindRoute } from '../navigation-socket/dto/route';
 
 @Injectable()
 export class MapboxglService {

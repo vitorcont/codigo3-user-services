@@ -24,14 +24,12 @@ export class AuthController {
   login(@Body() authData: AuthenticateDto) {
     return this.authService.authenticate(authData);
   }
-  @Post('changePassword')
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
+  @Post('change-password')
   changePassword(@Body() authData: ChangePasswordDto) {
     return this.authService.changePassword(authData);
   }
-  @Post('recovery')
+  @Post('recovery-request')
   recovery(@Body() authData: RecoveryDto) {
-    return this.authService.recovery(authData);
+    return this.authService.recoveryMail(authData);
   }
 }

@@ -27,9 +27,10 @@ jobs:
     name: Update Container
     needs: install_and_build
     steps:
+        run: docker compose down -v
       - name: Stop Container
-        working-directory: dashboard
+        working-directory: .docker
         run: docker compose down -v
       - name: Start Container
-        working-directory: dashboard
+        working-directory: .docker
         run: docker compose up -d --force-recreate --renew-anon-volumes

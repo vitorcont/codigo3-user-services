@@ -1,3 +1,3 @@
 export class CreateControllerSocketDto {
-  intersectionId: string;
+  token: string;
 }

@@ -19,34 +19,34 @@ export class NavigationSocketService {
         return foundRoutes;
       }
 
-      const baseWaypoints = foundRoutes.routes[0].geometry.coordinates.map(
-        (point) => ({
-          latitude: point[1],
-          longitude: point[0],
-        }),
-      );
-      const routeCenter = getCenterCoordinates(baseWaypoints);
+      // const baseWaypoints = foundRoutes.routes[0].geometry.coordinates.map(
+      //   (point) => ({
+      //     latitude: point[1],
+      //     longitude: point[0],
+      //   }),
+      // );
+      // const routeCenter = getCenterCoordinates(baseWaypoints);
 
-      const areaControllersList = await this.prisma.trafficController.findMany({
-        where: {
-          AND: [
-            { latitude: { lt: addDistance(routeCenter.latitude, 50) } },
-            { latitude: { gt: addDistance(routeCenter.latitude, -50) } },
-            { longitude: { lt: addDistance(routeCenter.latitude, 50, true) } },
-            { longitude: { gt: addDistance(routeCenter.latitude, -50, true) } },
-          ],
-        },
-      });
+      // const areaControllersList = await this.prisma.trafficController.findMany({
+      //   where: {
+      //     AND: [
+      //       { latitude: { lt: addDistance(routeCenter.latitude, 50) } },
+      //       { latitude: { gt: addDistance(routeCenter.latitude, -50) } },
+      //       { longitude: { lt: addDistance(routeCenter.latitude, 50, true) } },
+      //       { longitude: { gt: addDistance(routeCenter.latitude, -50, true) } },
+      //     ],
+      //   },
+      // });
 
-      const routesAvailable = [];
+      // const routesAvailable = [];
 
-      foundRoutes.routes.forEach((route) => {
-        const counter = 0;
-        const coordinates = route.geometry.coordinates;
-        for (let i = 0, j = 1; j < coordinates.length; i++, j++) {}
-      });
+      // foundRoutes.routes.forEach((route) => {
+      //   const counter = 0;
+      //   const coordinates = route.geometry.coordinates;
+      //   for (let i = 0, j = 1; j < coordinates.length; i++, j++) {}
+      // });
 
-      return null;
+      return foundRoutes[0];
     } catch (err) {
       //
     }

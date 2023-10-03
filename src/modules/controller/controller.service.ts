@@ -7,7 +7,7 @@ import { CreateControllerDto } from './dto/create-controller.dto';
 export class ControllerService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createControllerDto: UpdateControllerDto) {
+  async create(createControllerDto: any) {
     try {
       const created = await this.prisma.trafficController.create({
         data: createControllerDto,

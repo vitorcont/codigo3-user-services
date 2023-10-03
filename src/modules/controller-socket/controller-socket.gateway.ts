@@ -20,12 +20,12 @@ export class ControllerSocketGateway
     private readonly controllerSocketService: ControllerSocketService,
   ) {}
 
-  @WebSocketServer() server: Server;
+  @WebSocketServer() controllerServer: Server;
 
   private activeControllerList: IControllerMapper = {};
 
   handleConnection(client: Socket) {
-    this.server.emit('success', {
+    this.controllerServer.emit('success', {
       client: client.id,
     });
   }
@@ -39,18 +39,21 @@ export class ControllerSocketGateway
   }
 
   @SubscribeMessage('syncController')
-  createRoom(
+  async createRoom(
     @MessageBody() socketController: CreateControllerSocketDto,
     @ConnectedSocket() client: Socket,
   ) {
-    client.join(`intersection-${socketController.intersectionId}`);
-    this.server
-      .to(`intersection-${socketController.intersectionId}`)
+    const controller = await this.controllerSocketService.findControllerByToken(
+      socketController.token,
+    );
+    client.join(`intersection-${controller.intersectionId}`);
+    this.controllerServer
+      .to(`intersection-${controller.intersectionId}`)
       .emit('roomCreated', {
-        room: `intersection-${socketController.intersectionId}`,
+        room: `intersection-${controller.intersectionId}`,
       });
 
-    this.activeControllerList[socketController.intersectionId];
+    this.activeControllerList[controller.intersectionId];
   }
 
   @SubscribeMessage('closeConnection')

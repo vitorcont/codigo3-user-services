@@ -47,7 +47,7 @@ export class AuthService {
       }
       const updatedUser = this.prisma.user.update({
         where: {
-          id: this.request.user.id,
+          email: this.request.user.email,
         },
         data: {
           password: hashPassword(authData.newPassword),
@@ -59,7 +59,7 @@ export class AuthService {
       new HttpException('Bad Request', HttpStatusCode.BadRequest);
     }
   }
-  async recovery(authData: RecoveryDto) {
+  async recoveryMail(authData: RecoveryDto) {
     try {
       //
     } catch (err) {

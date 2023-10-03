@@ -20,9 +20,10 @@ export class NavigationSocketGateway
     private readonly navigationSocketService: NavigationSocketService,
   ) {}
   private activeUserList: IUserMapper = {};
-  @WebSocketServer() server: Server;
+  @WebSocketServer() navigationServer: Server;
+
   handleConnection(client: Socket) {
-    this.server.emit('success', {
+    this.navigationServer.emit('success', {
       client: client.id,
     });
   }
@@ -49,7 +50,7 @@ export class NavigationSocketGateway
   ) {
     client.join(`user-${socketUser.userId}`);
     this.activeUserList[socketUser.userId] = null;
-    this.server
+    this.navigationServer
       .to(`user-${socketUser.userId}`)
       .emit('roomCreated', { room: `user-${socketUser.userId}` });
   }
@@ -78,7 +79,7 @@ export class NavigationSocketGateway
       destinationLongitude: userInfo.destination.latitute,
     });
 
-    this.server.to(room).emit('tripPath', { room, path });
+    this.navigationServer.to(room).emit('tripPath', { room, path });
   }
 
   @SubscribeMessage('updateLocation')
@@ -124,6 +125,8 @@ export class NavigationSocketGateway
       item.includes('user-'),
     );
 
-    this.server.to(room).emit('usersLocations', { ...this.activeUserList });
+    this.navigationServer
+      .to(room)
+      .emit('usersLocations', { ...this.activeUserList });
   }
 }

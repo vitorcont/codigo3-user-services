@@ -46,15 +46,15 @@ model Travel {
 }
 
 model TrafficController {
-  id        String    @id @default(dbgenerated())
-  pathId    String    @map("path_id")
-  token     String
-  latitude  Float
-  longitude Float
-  direction Int
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  id             String    @id @default(dbgenerated())
+  intersectionId String    @map("intersection_id")
+  token          String
+  latitude       Float
+  longitude      Float
+  direction      Int
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
 
   @@map("traffic_controller")
 }
