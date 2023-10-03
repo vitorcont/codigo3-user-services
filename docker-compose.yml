@@ -7,13 +7,13 @@ services:
     container_name: codigo3-user-services
     restart: unless-stopped
     environment:
-      DATABASE_URL: $${secrets.DATABASE_URL}
-      MAPBOXGL_TOKEN: $${secrets.MAPBOXGL_TOKEN}
-      DEFAULT_PORT: $${secrets.DEFAULT_PORT}
-      JWT_SECRET: $${secrets.JWT_SECRET}
-      EMAIL_HOST: $${secrets.EMAIL_HOST}
-      EMAIL_PORT: $${secrets.EMAIL_PORT}
-      EMAIL_USER: $${secrets.EMAIL_USER}
-      EMAIL_PASSWORD: $${secrets.EMAIL_PASSWORD}
+      - DATABASE_URL=${DATABASE_URL}
+      - MAPBOXGL_TOKEN=${MAPBOXGL_TOKEN}
+      - DEFAULT_PORT=${DEFAULT_PORT}
+      - JWT_SECRET=${JWT_SECRET}
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_PORT=${EMAIL_PORT}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
     ports:
       - '3010:3010'
