@@ -25,7 +25,6 @@ jobs:
     name: Update Container
     needs: install_and_build
     steps:
-        run: docker compose down -v
       - name: Stop Container
         working-directory: .docker
         run: docker compose down -v
