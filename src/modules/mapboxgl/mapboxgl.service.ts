@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateMapboxglDto } from './dto/create-mapboxgl.dto';
 import { MapboxglRouteList } from './entities/mapboxgl.entity';
 import { FindRoute } from '../navigation-socket/dto/route';
+import { Console } from 'console';
 
 @Injectable()
 export class MapboxglService {
@@ -13,6 +14,7 @@ export class MapboxglService {
 
   async searchRoute(routeData: FindRoute) {
     try {
+      console.log(maskCoordinates(routeData));
       const routeInstance = getRoutesInstance();
       const { data } = await routeInstance.get(maskCoordinates(routeData));
       return data as MapboxglRouteList;

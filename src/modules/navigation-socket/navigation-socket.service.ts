@@ -46,7 +46,7 @@ export class NavigationSocketService {
       //   for (let i = 0, j = 1; j < coordinates.length; i++, j++) {}
       // });
 
-      return foundRoutes[0];
+      return foundRoutes;
     } catch (err) {
       //
     }

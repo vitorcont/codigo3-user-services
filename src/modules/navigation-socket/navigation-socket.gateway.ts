@@ -28,19 +28,25 @@ export class NavigationSocketGateway
     });
   }
   async handleDisconnect(client: Socket) {
-    const room = Array.from(client.rooms).find((item) =>
-      item.includes('user-'),
-    );
-    const userId = room.split('user-')[0];
-
-    if (this.activeUserList[userId].destination) {
-      await this.navigationSocketService.saveTrip(
-        userId,
-        this.activeUserList[userId],
+    try {
+      console.log('DISCONNECT', client.rooms);
+      const room = Array.from(client.rooms).find((item) =>
+        item.includes('user-'),
       );
-    }
+      const userId = room.split('user-')[1];
 
-    client.leave(room);
+      if (this.activeUserList[userId].destination) {
+        await this.navigationSocketService.saveTrip(
+          userId,
+          this.activeUserList[userId],
+        );
+      }
+
+      client.leave(room);
+    } catch (err) {
+      const room = Array.from(client.rooms)[0];
+      client.leave(room);
+    }
   }
 
   @SubscribeMessage('registerUser')
@@ -63,7 +69,7 @@ export class NavigationSocketGateway
     const room = Array.from(client.rooms).find((item) =>
       item.includes('user-'),
     );
-    const userId = room.split('user-')[0];
+    const userId = room.split('user-')[1];
     this.activeUserList[userId] = {
       currentLocation: null,
       destination: userInfo.destination,
@@ -76,10 +82,10 @@ export class NavigationSocketGateway
       originLatitude: userInfo.origin.latitute,
       originLongitude: userInfo.origin.longitude,
       destinationLatitude: userInfo.destination.latitute,
-      destinationLongitude: userInfo.destination.latitute,
+      destinationLongitude: userInfo.destination.longitude,
     });
 
-    this.navigationServer.to(room).emit('tripPath', { room, path });
+    this.navigationServer.to(room).emit('tripPath', path);
   }
 
   @SubscribeMessage('updateLocation')
@@ -87,15 +93,23 @@ export class NavigationSocketGateway
     @ConnectedSocket() client: Socket,
     @MessageBody() userInfo: IUpdateLocation,
   ) {
-    const room = Array.from(client.rooms).find((item) =>
-      item.includes('user-'),
-    );
-    const userId = room.split('user-')[0];
-    this.activeUserList[userId] = {
-      ...this.activeUserList[userId],
-      priority: userInfo.priority,
-      currentLocation: { ...userInfo },
-    };
+    try {
+      const room = Array.from(client.rooms).find((item) =>
+        item.includes('user-'),
+      );
+      console.log(this.activeUserList, client.rooms);
+      const userId = room.split('user-')[1];
+      this.activeUserList[userId] = {
+        ...this.activeUserList[userId],
+        priority: userInfo.priority,
+        currentLocation: { ...userInfo },
+      };
+    } catch (err) {
+      const room = Array.from(client.rooms)[0];
+      console.log('A', room);
+
+      this.navigationServer.to(room).emit('retryRegistration', {});
+    }
   }
 
   @SubscribeMessage('endTrip')
@@ -103,7 +117,7 @@ export class NavigationSocketGateway
     const room = Array.from(client.rooms).find((item) =>
       item.includes('user-'),
     );
-    const userId = room.split('user-')[0];
+    const userId = room.split('user-')[1];
 
     await this.navigationSocketService.saveTrip(
       userId,
