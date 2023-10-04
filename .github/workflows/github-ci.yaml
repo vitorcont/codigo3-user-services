@@ -29,8 +29,8 @@ jobs:
     runs-on: self-hosted
     name: Update Container
     env:
-      DATABASE_URL: ${{ secrets.ENV_DEV_DATABASE_URL }}
-      MAPBOXGL_TOKEN: ${{ secrets.ENV_DEV.MAPBOXGL_TOKEN }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      MAPBOXGL_TOKEN: ${{ secrets.MAPBOXGL_TOKEN }}
       DEFAULT_PORT: ${{ secrets.DEFAULT_PORT }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
@@ -45,8 +45,8 @@ jobs:
           echo "MY_SECRET: $DATABASE_URL"
           echo "TESTE: $MAPBOXGL_TOKEN"
         env:
-          DATABASE_URL: ${{ secrets.ENV_DEV_DATABASE_URL }}
-          MAPBOXGL_TOKEN: ${{ secrets.ENV_DEV.MAPBOXGL_TOKEN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          MAPBOXGL_TOKEN: ${{ secrets.MAPBOXGL_TOKEN }}
           DEFAULT_PORT: ${{ secrets.DEFAULT_PORT }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
