@@ -44,7 +44,7 @@ jobs:
         run: |
           echo "MY_SECRET: $DATABASE_URL"
           echo "ANOTHER_VAR: $MAPBOXGL_TOKEN"
-      - name: Stop Container
-        run: docker compose down -v
-      - name: Start Container
-        run: docker compose up -d --force-recreate --renew-anon-volumes
+      # - name: Stop Container
+      #   run: docker compose down -v
+      # - name: Start Container
+      #   run: docker compose up -d --force-recreate --renew-anon-volumes
