@@ -44,6 +44,6 @@ jobs:
       - name: Delete image
         run: docker image rm codigo3-user --force || true
       - name: Container rebuild
-        run: docker-compose build --no-cache
+        run: docker compose build --no-cache
       - name: Start container
         run: docker compose up -d --force-recreate --renew-anon-volumes
