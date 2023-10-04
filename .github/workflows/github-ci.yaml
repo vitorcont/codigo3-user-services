@@ -12,23 +12,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
   install_and_build:
-  runs-on: self-hosted
-  name: Install deps and build
-  needs: pull
-  steps:
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16.14.0
-    - name: Install dependencies
-      run: yarn install
-    - name: Update prisma dependencies
-      run: npx prisma generate
-    - name: Build
-      run: yarn build
+    runs-on: self-hosted
+    name: Install deps and build
+    needs: pull
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.14.0
+      - name: Install dependencies
+        run: yarn install
+      - name: Update prisma dependencies
+        run: npx prisma generate
+      - name: Build
+        run: yarn build
   upload_container:
     runs-on: self-hosted
-    needs: install_and_build
     name: Update Container
+    needs: install_and_build
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       MAPBOXGL_TOKEN: ${{ secrets.MAPBOXGL_TOKEN }}
