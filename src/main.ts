@@ -8,6 +8,7 @@ dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
+  app.setGlobalPrefix('/codigo3/user-services');
 
   const config = new DocumentBuilder()
     .setTitle('API Atendimento a emergências')
