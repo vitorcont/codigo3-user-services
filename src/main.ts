@@ -22,10 +22,12 @@ async function bootstrap() {
     })
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/', app, document);
+  SwaggerModule.setup('/codigo3/user-services', app, document);
 
   await app.listen(process.env.DEFAULT_PORT);
 
-  console.log(`\nApp Running on http://localhost:${process.env.DEFAULT_PORT}`);
+  console.log(
+    `\nApp Running on http://localhost:${process.env.DEFAULT_PORT}/codigo3/user-services`,
+  );
 }
 bootstrap();
