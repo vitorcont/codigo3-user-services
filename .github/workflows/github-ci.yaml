@@ -31,6 +31,7 @@ jobs:
     # needs: install_and_build
     steps:
       - name: Envs secrets
+        env:
           DATABASE_URL: ${{ secrets.ENV_DEV_DATABASE_URL }}
           MAPBOXGL_TOKEN: ${{ secrets.ENV_DEV.MAPBOXGL_TOKEN }}
           DEFAULT_PORT: ${{ secrets.DEFAULT_PORT }}
@@ -47,4 +48,3 @@ jobs:
         run: docker compose down -v
       - name: Start Container
         run: docker compose up -d --force-recreate --renew-anon-volumes
-        env:
