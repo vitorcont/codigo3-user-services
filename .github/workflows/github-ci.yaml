@@ -27,7 +27,7 @@ jobs:
         run: yarn build
   upload_container:
     env:
-      DATABASE_URL: ${{ secrets.ENV_DEV_DATABASE_URL }}
+      DATABASE_URL: ${{ secrets.ENV_DEV.DATABASE_URL }}
       MAPBOXGL_TOKEN: ${{ secrets.MAPBOXGL_TOKEN }}
       DEFAULT_PORT: ${{ secrets.DEFAULT_PORT }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
