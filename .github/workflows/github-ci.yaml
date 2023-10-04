@@ -6,53 +6,45 @@ on:
       - master
   workflow_dispatch:
 jobs:
-  pull:
-    name: Pulling from repo
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v1
-  install_and_build:
-    runs-on: self-hosted
-    name: Install deps and build
-    needs: pull
-    steps:
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16.14.0
-      - name: Install dependencies
-        run: yarn install
-      - name: Update prisma dependencies
-        run: npx prisma generate
-      - name: Build
-        run: yarn build
+  # pull:
+  #   name: Pulling from repo
+  #   runs-on: self-hosted
+  #   steps:
+  #     - uses: actions/checkout@v1
+  # install_and_build:
+  # runs-on: self-hosted
+  # name: Install deps and build
+  # needs: pull
+  # steps:
+  #   - uses: actions/setup-node@v3
+  #     with:
+  #       node-version: 16.14.0
+  #   - name: Install dependencies
+  #     run: yarn install
+  #   - name: Update prisma dependencies
+  #     run: npx prisma generate
+  #   - name: Build
+  #     run: yarn build
   upload_container:
-    env:
-      DATABASE_URL: ${{ secrets.ENV_DEV.DATABASE_URL }}
-      MAPBOXGL_TOKEN: ${{ secrets.MAPBOXGL_TOKEN }}
-      DEFAULT_PORT: ${{ secrets.DEFAULT_PORT }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
-      EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
-      EMAIL_USER: ${{ secrets.EMAIL_USER }}
-      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
     runs-on: self-hosted
     name: Update Container
-    needs: install_and_build
+    # needs: install_and_build
     steps:
-      - name: Display secrets
-        run: |
-          echo "MY_SECRET: $DATABASE_URL"
-          echo "ANOTHER_VAR: $ANOTHER_VAR"
-      - name: Stop Container
-        run: docker compose down -v
-      - name: Start Container
-        run: docker compose up -d --force-recreate --renew-anon-volumes
-        env:
+      - name: Envs secrets
           DATABASE_URL: ${{ secrets.ENV_DEV_DATABASE_URL }}
-          MAPBOXGL_TOKEN: ${{ secrets.MAPBOXGL_TOKEN }}
+          MAPBOXGL_TOKEN: ${{ secrets.ENV_DEV.MAPBOXGL_TOKEN }}
           DEFAULT_PORT: ${{ secrets.DEFAULT_PORT }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
           EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      - name: Display secrets
+        run: |
+          echo "MY_SECRET: $DATABASE_URL"
+          echo "ANOTHER_VAR: $MAPBOXGL_TOKEN"
+      - name: Stop Container
+        run: docker compose down -v
+      - name: Start Container
+        run: docker compose up -d --force-recreate --renew-anon-volumes
+        env:
