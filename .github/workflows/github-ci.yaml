@@ -6,11 +6,11 @@ on:
       - master
   workflow_dispatch:
 jobs:
-  # pull:
-  #   name: Pulling from repo
-  #   runs-on: self-hosted
-  #   steps:
-  #     - uses: actions/checkout@v1
+  pull:
+    name: Pulling from repo
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
   # install_and_build:
   # runs-on: self-hosted
   # name: Install deps and build
