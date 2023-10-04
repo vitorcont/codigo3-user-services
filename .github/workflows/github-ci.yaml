@@ -28,10 +28,21 @@ jobs:
   upload_container:
     runs-on: self-hosted
     name: Update Container
+    env:
+      DATABASE_URL: ${{ secrets.ENV_DEV_DATABASE_URL }}
+      MAPBOXGL_TOKEN: ${{ secrets.ENV_DEV.MAPBOXGL_TOKEN }}
+      DEFAULT_PORT: ${{ secrets.DEFAULT_PORT }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+      EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+      EMAIL_USER: ${{ secrets.EMAIL_USER }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
     # needs: install_and_build
     steps:
       - name: Envs secrets
-        run: echo "test"
+        run: |
+          echo "MY_SECRET: $DATABASE_URL"
+          echo "TESTE: $MAPBOXGL_TOKEN"
         env:
           DATABASE_URL: ${{ secrets.ENV_DEV_DATABASE_URL }}
           MAPBOXGL_TOKEN: ${{ secrets.ENV_DEV.MAPBOXGL_TOKEN }}
