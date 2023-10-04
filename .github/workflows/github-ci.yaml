@@ -40,6 +40,8 @@ jobs:
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
     steps:
       - name: Stop Container
-        run: docker compose down -v
+        run: docker compose down -v || true
+      - name: Delete Image
+        run: docker image rm codigo3-user --force || true
       - name: Start Container
         run: docker compose up -d --force-recreate --renew-anon-volumes
