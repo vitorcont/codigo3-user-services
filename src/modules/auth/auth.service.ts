@@ -20,19 +20,23 @@ export class AuthService {
   ) {}
   async authenticate(authData: AuthenticateDto) {
     try {
+      console.log(authData);
       const user = await this.prisma.user.findFirst({
         where: {
           email: authData.email,
         },
       });
       const validated = await comparePassword(authData.password, user.password);
+      console.log(validated);
       if (!validated) {
         throw Error();
       }
       const token = generateJwt(user);
 
-      return { token };
+      return { accessToken: token };
     } catch (err) {
+      console.log('AQUI', err);
+
       new HttpException('Bad Request', HttpStatusCode.BadRequest);
     }
   }

@@ -79,9 +79,9 @@ export class NavigationSocketGateway
     };
 
     const path = await this.navigationSocketService.searchPath({
-      originLatitude: userInfo.origin.latitute,
+      originLatitude: userInfo.origin.latitude,
       originLongitude: userInfo.origin.longitude,
-      destinationLatitude: userInfo.destination.latitute,
+      destinationLatitude: userInfo.destination.latitude,
       destinationLongitude: userInfo.destination.longitude,
     });
 

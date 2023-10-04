@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ILocation {
-  latitute: number;
+  latitude: number;
   longitude: number;
   priority?: number;
 }
@@ -13,7 +13,7 @@ export class ISearchRoute {
 }
 
 export class IUpdateLocation {
-  latitute: number;
+  latitude: number;
   longitude: number;
   priority: number;
 }

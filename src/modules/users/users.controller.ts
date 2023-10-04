@@ -20,7 +20,6 @@ import { AuthGuard } from 'src/libraries/auth/auth.guard';
 @UseGuards(AuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
@@ -29,6 +28,11 @@ export class UsersController {
   @Get()
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @Get('me')
+  findMe() {
+    return this.usersService.findMe();
   }
 
   @Get(':id')

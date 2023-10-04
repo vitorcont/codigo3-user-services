@@ -1,14 +1,5 @@
 import { ChangePasswordDto } from './dto/change-password.dto';
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AuthenticateDto } from './dto/authenticate.dto';
@@ -22,6 +13,7 @@ export class AuthController {
 
   @Post('login')
   login(@Body() authData: AuthenticateDto) {
+    console.log('A');
     return this.authService.authenticate(authData);
   }
   @Post('change-password')

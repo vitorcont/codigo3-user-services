@@ -1,13 +1,24 @@
-import { HttpCode, HttpException, Injectable } from '@nestjs/common';
+import {
+  HttpCode,
+  HttpException,
+  Inject,
+  Injectable,
+  Scope,
+} from '@nestjs/common';
+import { REQUEST } from '@nestjs/core';
 import { HttpStatusCode } from 'axios';
 import { hashPassword } from 'src/libraries/encryption/becrypt';
 import PrismaService from 'src/libraries/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @Inject(REQUEST)
+    private readonly request: any,
+    private prisma: PrismaService,
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
     try {
@@ -25,6 +36,21 @@ export class UsersService {
   async findAll() {
     try {
       const result = await this.prisma.user.findMany();
+
+      return result;
+    } catch (err) {
+      new HttpException('Bad Request', HttpStatusCode.BadRequest);
+    }
+  }
+
+  async findMe() {
+    try {
+      console.log('HERE', this.request.user);
+      const result = await this.prisma.user.findFirst({
+        where: {
+          id: this.request.user.id,
+        },
+      });
 
       return result;
     } catch (err) {

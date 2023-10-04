@@ -1,3 +1,4 @@
+import { isPointInsideRadius } from './../../utils/routes';
 import { Injectable } from '@nestjs/common';
 import { UpdateNavigationSocketDto } from './dto/update-navigation-socket.dto';
 import { getCenterCoordinates, addDistance } from 'src/utils/routes';
@@ -54,18 +55,26 @@ export class NavigationSocketService {
 
   async saveTrip(id: string, userInfo: IUserIndividual) {
     try {
-      await this.prisma.travel.create({
-        data: {
-          originLatitude: userInfo.origin.latitute,
-          originLongitude: userInfo.origin.longitude,
-          destinationLatitude: userInfo.destination.latitute,
-          destinationLongitude: userInfo.destination.longitude,
-          priority: userInfo.priority,
-          departedAt: userInfo.startedAt,
-          arrivedAt: new Date(),
-          userId: id,
-        },
-      });
+      const isPointNearEnd = isPointInsideRadius(
+        userInfo.origin,
+        userInfo.destination,
+        0.6,
+      );
+
+      if (isPointNearEnd) {
+        await this.prisma.travel.create({
+          data: {
+            originLatitude: userInfo.origin.latitude,
+            originLongitude: userInfo.origin.longitude,
+            destinationLatitude: userInfo.destination.latitude,
+            destinationLongitude: userInfo.destination.longitude,
+            priority: userInfo.priority,
+            departedAt: userInfo.startedAt,
+            arrivedAt: new Date(),
+            userId: id,
+          },
+        });
+      }
     } catch (err) {
       //
     }
