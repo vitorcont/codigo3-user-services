@@ -1,7 +1,6 @@
 import { UpdateControllerDto } from './dto/update-controller.dto';
 import { Injectable } from '@nestjs/common';
 import PrismaService from 'src/libraries/prisma/prisma.service';
-import { CreateControllerDto } from './dto/create-controller.dto';
 
 @Injectable()
 export class ControllerService {

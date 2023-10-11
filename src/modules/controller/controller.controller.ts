@@ -1,4 +1,4 @@
-import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import {
   Controller,
   Get,
@@ -7,17 +7,13 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
 } from '@nestjs/common';
 import { ControllerService } from './controller.service';
 import { CreateControllerDto } from './dto/create-controller.dto';
 import { UpdateControllerDto } from './dto/update-controller.dto';
-import { AuthGuard } from 'src/libraries/auth/auth.guard';
 
 @ApiTags('Traffic Controller')
 @Controller('controller')
-@ApiBearerAuth()
-@UseGuards(AuthGuard)
 export class ControllerController {
   constructor(private readonly controllerService: ControllerService) {}
 
