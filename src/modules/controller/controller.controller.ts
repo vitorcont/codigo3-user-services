@@ -7,6 +7,7 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { ControllerService } from './controller.service';
 import { CreateControllerDto } from './dto/create-controller.dto';
@@ -32,7 +33,7 @@ export class ControllerController {
     return this.controllerService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updateControllerDto: UpdateControllerDto,

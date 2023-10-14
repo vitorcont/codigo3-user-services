@@ -7,10 +7,4 @@ export class CreateControllerDto {
   latitude: number;
   @ApiProperty()
   longitude: number;
-  @ApiProperty()
-  createdAt: Date;
-  @ApiProperty()
-  updatedAt: Date;
-  @ApiProperty()
-  deletedAt: Date;
 }

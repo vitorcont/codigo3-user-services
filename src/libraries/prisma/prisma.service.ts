@@ -9,6 +9,32 @@ class PrismaService extends PrismaClient implements OnModuleInit {
 
     this.$use(async (params, next) => {
       const args = params.args ?? {};
+      const where = args.where ?? {};
+
+      if (
+        params.action === 'findUnique' ||
+        params.action === 'findFirst' ||
+        params.action === 'findMany' ||
+        params.action === 'count'
+      ) {
+        params.args = {
+          ...args,
+          where: {
+            ...where,
+            deletedAt: null,
+          },
+        };
+      }
+
+      if (params.action === 'findUnique' || params.action === 'findFirst') {
+        params.action = 'findFirst';
+      }
+
+      return next(params);
+    });
+
+    this.$use(async (params, next) => {
+      const args = params.args ?? {};
 
       if (params.action === 'create') {
         params.args = {

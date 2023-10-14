@@ -1,10 +1,4 @@
-import {
-  HttpCode,
-  HttpException,
-  Inject,
-  Injectable,
-  Scope,
-} from '@nestjs/common';
+import { HttpException, Inject, Injectable, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { HttpStatusCode } from 'axios';
 import { hashPassword } from 'src/libraries/encryption/becrypt';

@@ -10,7 +10,7 @@ async function bootstrap() {
   app.setGlobalPrefix('/codigo3/user-services');
 
   const config = new DocumentBuilder()
-    .setTitle('API Atendimento a emergências')
+    .setTitle('Código3: API de serviços de usuário')
     .setDescription('Aplicação voltada a priorização de veículos oficiais')
     .addBearerAuth({
       name: 'Authorization',
