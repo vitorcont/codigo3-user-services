@@ -8,7 +8,6 @@ export class TravelService {
 
   async findAll() {
     try {
-      console.log('resultado');
       const result = await this.prisma.travel.findMany();
       console.log('resultado', result);
 

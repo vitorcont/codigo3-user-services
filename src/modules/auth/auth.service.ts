@@ -1,3 +1,4 @@
+import { sendEmail } from './../../utils/mail';
 import { RecoveryDto } from './dto/recovery.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { generateJwt } from './../../libraries/encryption/jwt';
@@ -36,7 +37,6 @@ export class AuthService {
       return { accessToken: token };
     } catch (err) {
       console.log('AQUI', err);
-
       new HttpException('Bad Request', HttpStatusCode.BadRequest);
     }
   }
@@ -65,7 +65,22 @@ export class AuthService {
   }
   async recoveryMail(authData: RecoveryDto) {
     try {
-      //
+      const newPassword = Math.random().toString(36).slice(-8);
+      const hashedPassword = hashPassword(newPassword);
+      sendEmail(
+        'Nova senha - Código 3',
+        authData.email,
+        `Sua nova senha sera: ${newPassword}`,
+      );
+      await this.prisma.user.update({
+        where: {
+          email: authData.email,
+        },
+        data: {
+          password: hashedPassword,
+        },
+      });
+      return;
     } catch (err) {
       new HttpException('Bad Request', HttpStatusCode.BadRequest);
     }

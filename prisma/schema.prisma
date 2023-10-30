@@ -55,21 +55,5 @@ model TrafficController {
   updatedAt DateTime? @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
-  directions TrafficDirections[]
-
   @@map("traffic_controller")
-}
-
-model TrafficDirections {
-  id           String @id @default(dbgenerated())
-  controllerId String
-  bearing      Int
-
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
-
-  controller TrafficController @relation(fields: [controllerId], references: [id])
-
-  @@map("traffic_directions")
 }
