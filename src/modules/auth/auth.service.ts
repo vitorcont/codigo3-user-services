@@ -65,6 +65,9 @@ export class AuthService {
   }
   async recoveryMail(authData: RecoveryDto) {
     try {
+      if (!authData.email) {
+        new HttpException('Bad Request', HttpStatusCode.BadRequest);
+      }
       const newPassword = Math.random().toString(36).slice(-8);
       const hashedPassword = hashPassword(newPassword);
       sendEmail(
