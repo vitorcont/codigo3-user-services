@@ -13,7 +13,7 @@ export class TravelService {
 
       return result;
     } catch (err) {
-      new HttpException('Bad Request', HttpStatusCode.BadRequest);
+      throw new HttpException('Bad Request', HttpStatusCode.BadRequest);
     }
   }
 
@@ -27,7 +27,7 @@ export class TravelService {
 
       return result;
     } catch (err) {
-      new HttpException('Bad Request', HttpStatusCode.BadRequest);
+      throw new HttpException('Bad Request', HttpStatusCode.BadRequest);
     }
   }
 
@@ -44,7 +44,7 @@ export class TravelService {
 
       return result;
     } catch (err) {
-      new HttpException('Bad Request', HttpStatusCode.BadRequest);
+      throw new HttpException('Bad Request', HttpStatusCode.BadRequest);
     }
   }
 }

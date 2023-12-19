@@ -37,7 +37,7 @@ export class AuthService {
       return { accessToken: token };
     } catch (err) {
       console.log('AQUI', err);
-      new HttpException('Bad Request', HttpStatusCode.BadRequest);
+      throw new HttpException('Bad Request', HttpStatusCode.BadRequest);
     }
   }
   async changePassword(authData: ChangePasswordDto) {
@@ -60,13 +60,13 @@ export class AuthService {
 
       return updatedUser;
     } catch (err) {
-      new HttpException('Bad Request', HttpStatusCode.BadRequest);
+      throw new HttpException('Bad Request', HttpStatusCode.BadRequest);
     }
   }
   async recoveryMail(authData: RecoveryDto) {
     try {
       if (!authData.email) {
-        new HttpException('Bad Request', HttpStatusCode.BadRequest);
+        throw new HttpException('Bad Request', HttpStatusCode.BadRequest);
       }
       const newPassword = Math.random().toString(36).slice(-8);
       const hashedPassword = hashPassword(newPassword);
@@ -85,7 +85,7 @@ export class AuthService {
       });
       return;
     } catch (err) {
-      new HttpException('Bad Request', HttpStatusCode.BadRequest);
+      throw new HttpException('Bad Request', HttpStatusCode.BadRequest);
     }
   }
 }
