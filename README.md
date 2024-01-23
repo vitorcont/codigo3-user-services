@@ -23,7 +23,6 @@ https://conti-server.com.br/codigo3/user-services/
 
 O Serviço foi desenvolvido utilizando os padrões de API RESTful e sua comunicação é feita utilizando os protocolos Hyper Text Transfer Protocol Secure (HTTPS), a linguagem Javascript associado ao ambiente de execução NodeJS e a framework  NestJS, está framework tem como princípio a modularização das interfaces, facilitando a quebra em micro-serviços. Além disso, seu banco de dados foi criado utilizando o gerenciador Postgres.
 
-https://miro.com/app/board/uXjVMVdjNnE=/?moveToWidget=3458764568111781670&cot=14
 
 ### Documentação
 * Figma:
