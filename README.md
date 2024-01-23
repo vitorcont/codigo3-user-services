@@ -1,8 +1,5 @@
 [![Quality gate](https://conti-server.com.br/sonarqube/api/project_badges/quality_gate?project=vitorcont_codigo3-user-services_AYyAB5tv5KutpObFMwcN&token=sqb_51b01a58671d3dd6358a82e9d5e59bf6971e119a)](https://conti-server.com.br/sonarqube/dashboard?id=vitorcont_codigo3-user-services_AYyAB5tv5KutpObFMwcN)
 
-[![Quality gate](https://conti-server.com.br/sonarqube/api/project_badges/quality_gate?project=vitorcont_codigo3-user-services_AYyAB5tv5KutpObFMwcN&token=sqb_51b01a58671d3dd6358a82e9d5e59bf6971e119a)](https://conti-server.com.br/sonarqube/dashboard?id=vitorcont_codigo3-user-services_AYyAB5tv5KutpObFMwcN)
-
-
 # Código 3 - Projeto de Finalização de curso
 
 ### Priorização no deslocamento de veículos de emergência utilizando a infraestrutura conectada de grandes centros urbanos
