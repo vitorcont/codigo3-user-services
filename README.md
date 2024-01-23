@@ -11,6 +11,9 @@ Este projeto explora de como se pode utilizar artifícios de integração a infr
 
 Este repositório se diz a respeito do micro-serviço de usuários, o mesmo tem como objetivo disponibilizar a interface de contrato / a API para alguns serviços voltados ao usuário, onde a recorrência de requisições será baixa, ela contém as interfaces de: CRUD de usuarios, Autenticação, visualização de viagens e CRUD de Controladores de tráfego
 
+![TCC - Diagrama de Alto Nível MS Usuário](https://github.com/vitorcont/codigo3-user-services/assets/69795902/8bee1d56-7d90-4332-a0de-d47dbc08a9f9)
+
+
 Para sua publicação é gerado um artefato e o mesmo é inserido em um container para que seja hospedado utilizando a ferramenta Docker [Docker]. Sua publicação pode ser acessada utilizando o link a seguir:
 https://conti-server.com.br/codigo3/user-services/
 
@@ -20,6 +23,7 @@ https://conti-server.com.br/codigo3/user-services/
 
 O Serviço foi desenvolvido utilizando os padrões de API RESTful e sua comunicação é feita utilizando os protocolos Hyper Text Transfer Protocol Secure (HTTPS), a linguagem Javascript associado ao ambiente de execução NodeJS e a framework  NestJS, está framework tem como princípio a modularização das interfaces, facilitando a quebra em micro-serviços. Além disso, seu banco de dados foi criado utilizando o gerenciador Postgres.
 
+https://miro.com/app/board/uXjVMVdjNnE=/?moveToWidget=3458764568111781670&cot=14
 
 ### Documentação
 * Figma:
